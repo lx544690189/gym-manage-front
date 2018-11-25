@@ -30,6 +30,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-plugin-import": "^1.11.0"
   }
 }
