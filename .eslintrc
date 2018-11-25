@@ -1,3 +1,13 @@
 {
-  "extends": "eslint-config-umi"
+  "extends": "eslint-config-umi",
+  "rules":{
+    "semi": ["error", "always"],
+    "react/jsx-closing-bracket-location": 1, 
+    "react/jsx-boolean-value": 1,
+    "react/no-string-refs": 1,
+    "react/self-closing-comp": 1,
+    "jsx-quotes": [2, "prefer-double"],
+    "comma-dangle": [2, "always-multiline"],
+    "eqeqeq": [2, "allow-null"]
+  }
 }
