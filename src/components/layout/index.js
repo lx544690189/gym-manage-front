@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
@@ -31,7 +31,9 @@ class componentName extends Component {
           <div className="logo">
             GYM
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu 
+          theme="dark" mode="inline" defaultSelectedKeys={['1']}
+          >
             <Menu.Item key="1">
               <Icon type="user" />
               <span className="nav-text">guide</span>
@@ -41,14 +43,16 @@ class componentName extends Component {
                 key="page1"
                 onClick={() => {
                   this.props.dispatch(routerRedux.push('/page1'));
-                }}>
+                }}
+              >
                 page1
               </Menu.Item>
               <Menu.Item
                 key="page2"
                 onClick={() => {
                   this.props.dispatch(routerRedux.push('/page2'));
-                }}>
+                }}
+              >
                 page2
               </Menu.Item>
             </SubMenu>
@@ -67,8 +71,8 @@ class componentName extends Component {
           </Footer>
         </Layout>
       </Layout>
-    )
+    );
   }
 }
 
-export default componentName
+export default componentName;

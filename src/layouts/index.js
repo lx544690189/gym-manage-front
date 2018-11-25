@@ -6,7 +6,7 @@ function BasicLayout(props) {
       <div>
         {props.children}
       </div>
-    )
+    );
   }
   return (
     <Layout>

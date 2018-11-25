@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
 
 const { Header } = Layout;
@@ -35,8 +35,8 @@ class componentName extends Component {
 
         </div>
       </Header>
-    )
+    );
   }
 }
 
-export default componentName
+export default componentName;
