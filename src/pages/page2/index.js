@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Card,Breadcrumb } from 'antd';
 
 class Index extends Component {
@@ -13,8 +13,8 @@ class Index extends Component {
           page2
         </Card>
       </div>
-    )
+    );
   }
 }
 
-export default Index
+export default Index;

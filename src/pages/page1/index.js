@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Card } from 'antd';
 // import './index.less'
 
@@ -11,8 +11,8 @@ class Index extends Component {
           page1
         </Card>
       </div>
-    )
+    );
   }
 }
 
-export default Index
+export default Index;
