@@ -1,18 +1,33 @@
+
+
+import React, { Component } from 'react';
+import { connect } from 'dva';
 import Layout from '../components/layout/index';
 
-function BasicLayout(props) {
-  if (props.location.pathname === '/login') {
+@connect(({ global }) => ({
+  global,
+}))
+class BasicLayout extends Component {
+  componentDidMount(){
+    this.props.dispatch({
+      type: 'global/getUserInfo',
+    });
+  }
+  render () {
+    const {location,children} = this.props;
+    if (location.pathname === '/login') {
+      return (
+        <div>
+          {children}
+        </div>
+      );
+    }
     return (
-      <div>
-        {props.children}
-      </div>
+      <Layout>
+        {children}
+      </Layout>
     );
   }
-  return (
-    <Layout>
-      {props.children}
-    </Layout>
-  );
 }
 
 export default BasicLayout;

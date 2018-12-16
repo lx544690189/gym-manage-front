@@ -8,6 +8,13 @@ const { Header } = Layout;
   global,
 }))
 class componentName extends Component {
+
+  logout=()=>{
+    this.props.dispatch({
+      type: 'global/logout',
+    });
+  }
+
   render() {
     const { collapsed, toggle, global } = this.props;
     const menu = (
@@ -16,7 +23,7 @@ class componentName extends Component {
           <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">个人中心</a>
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="3">退出登录</Menu.Item>
+        <Menu.Item key="3" onClick={this.logout}>退出登录</Menu.Item>
       </Menu>
     );
 
