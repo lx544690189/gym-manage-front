@@ -4,7 +4,7 @@ const request = axios.create({
   baseURL: '/gym/',
   timeout: 10000,
   headers: {
-    'x-csrf-token': 'CsaqsmcMedQWqJ26R6v2m6a5',
+    'x-csrf-token': '_RBPYFL_YKJNUrWJzzroJHsw',
   },
 });
 

@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
 
 const { Header } = Layout;
 
+@connect(({ global }) => ({
+  global,
+}))
 class componentName extends Component {
   render() {
-    const { collapsed, toggle } = this.props;
+    const { collapsed, toggle, global } = this.props;
     const menu = (
       <Menu>
         <Menu.Item key="0">
@@ -29,7 +33,7 @@ class componentName extends Component {
               <span className="avatar">
                 <img src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" alt="avatar" />
               </span>
-              <span className="name">admin</span>
+              <span className="name" >{global.userInfo.username}</span>
             </span>
           </Dropdown>
 

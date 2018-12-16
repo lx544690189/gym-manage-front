@@ -3,7 +3,7 @@ import request from '../../../utils/axios';
 export function userLogin(data){
   return request({
     method: 'post',
-    url: '/admin/login',
+    url: '/login',
     data,
   });
 }

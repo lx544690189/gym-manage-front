@@ -1,38 +1,34 @@
 import React, { Component } from 'react';
-import {connect} from 'dva';
+import { connect } from 'dva';
 import { Tabs, Form, Icon, Input, Button, Checkbox } from 'antd';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
-const create = Form.create;
 
-@connect(({login})=>({
+@connect(({ login }) => ({
   login,
 }))
-@create()
+@Form.create()
 class Index extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.dispatch({
-      type:'login/testGet',
-      payload:{
-        id:1,
+      type: 'login/testGet',
+      payload: {
+        id: 1,
       },
     });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const {type} = this.props.history.location.query;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        if(type === 'admin'){
-          this.props.dispatch({
-            type:'login/userLogin',
-            payload:values,
-          });
-        }
+        this.props.dispatch({
+          type: 'login/userLogin',
+          payload: values,
+        });
       }
     });
   }
