@@ -38,14 +38,14 @@ class componentName extends Component {
               <Icon type="user" />
               <span className="nav-text">guide</span>
             </Menu.Item>
-            <SubMenu key="sub1" title={<span><Icon type="mail" /><span>demo</span></span>}>
+            <SubMenu key="sub1" title={<span><Icon type="mail" /><span>用户管理</span></span>}>
               <Menu.Item
-                key="page1"
+                key="/user/list"
                 onClick={() => {
-                  this.props.dispatch(routerRedux.push('/page1'));
+                  this.props.dispatch(routerRedux.push('/user/list'));
                 }}
               >
-                page1
+                用户列表
               </Menu.Item>
               <Menu.Item
                 key="page2"
