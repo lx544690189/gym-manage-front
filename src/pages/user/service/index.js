@@ -7,3 +7,11 @@ export function accountList(data){
     data,
   });
 }
+
+export function addAccount(data){
+  return request({
+    method: 'post',
+    url: '/account/add',
+    data,
+  });
+}

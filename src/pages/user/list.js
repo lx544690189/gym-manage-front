@@ -1,30 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Breadcrumb, Table, Form, Input, Button, Drawer } from 'antd';
+import { Card, Breadcrumb, Table, Form, Input, Button, message } from 'antd';
 import AddUser from './components/addUser';
 import './index.less';
 
 const FormItem = Form.Item;
 
-@connect()
+@connect(({ loading }) => ({
+  loading: loading.effects['user/list'],
+}))
 @Form.create()
 class Index extends Component {
 
   state = {
     tableData: [],
+    current: 1,
+    total: 0,
     addUserVisible: false,
   }
 
   componentDidMount() {
-    console.log(this.props);
+    this.getTableData();
+  }
+
+  getTableData = (payload) => {
     this.props.dispatch({
       type: 'user/list',
-      payload: {},
+      payload,
     }).then(res => {
-      console.log('res: ', res);
       this.setState({
         tableData: res.data.data.rows,
+        total: res.data.data.count,
       });
+    });
+  }
+
+  pageChange = (pageNumber) => {
+    this.setState({
+      current: pageNumber,
+    });
+    this.getTableData({
+      pageNumber,
     });
   }
 
@@ -35,10 +51,31 @@ class Index extends Component {
     });
   }
 
+  onAdd = (values) => {
+    this.props.dispatch({
+      type: 'user/addAccount',
+      payload: values,
+    }).then(res => {
+      if (res.data.success) {
+        message.success('新增用户成功！');
+        this.setState({
+          addUserVisible: false,
+          current: 1,
+        });
+        this.getTableData({
+          pageNumber: 1,
+        });
+      } else {
+        message.error(res.data.message);
+      }
+    });
+  }
+
 
 
   render() {
-    const { tableData, addUserVisible } = this.state;
+    const { tableData, addUserVisible, current, total } = this.state;
+    const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
     const columns = [{
       title: '姓名',
@@ -56,11 +93,14 @@ class Index extends Component {
         return '-';
       },
     }, {
-      title: '年龄',
-      dataIndex: 'age',
+      title: '出生日期',
+      dataIndex: 'birthday',
     }, {
       title: '手机号',
       dataIndex: 'mobile',
+    }, {
+      title: '创建日期',
+      dataIndex: 'created_at',
     }, {
       title: '操作',
       render: () => {
@@ -96,10 +136,20 @@ class Index extends Component {
             rowKey="id"
             columns={columns}
             dataSource={tableData}
+            loading={loading}
+            pagination={{
+              current,
+              total,
+              showTotal(total) {
+                return `共 ${total} 条`;
+              },
+              onChange: this.pageChange,
+            }}
           />
         </Card>
         <AddUser
           visible={addUserVisible}
+          onOk={this.onAdd}
           onClose={() => {
             this.setState({
               addUserVisible: false,
