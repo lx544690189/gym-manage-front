@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Tabs, Form, Icon, Input, Button, Checkbox } from 'antd';
+import md5 from 'md5';
 import './index.less';
 
 const TabPane = Tabs.TabPane;
@@ -12,22 +13,16 @@ const FormItem = Form.Item;
 @Form.create()
 class Index extends Component {
 
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'login/testGet',
-      payload: {
-        id: 1,
-      },
-    });
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.dispatch({
           type: 'login/userLogin',
-          payload: values,
+          payload: {
+            username:values.username,
+            password:md5(values.password),
+          },
         });
       }
     });
