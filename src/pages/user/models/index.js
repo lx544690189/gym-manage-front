@@ -1,4 +1,4 @@
-import { accountList, addAccount } from '../service';
+import { accountList, addAccount, updateAccount, resetPassword } from '../service';
 
 export default {
   namespace: 'user',
@@ -11,6 +11,14 @@ export default {
     },
     *addAccount({ payload }, { call, put }) {
       const response = yield call(addAccount, payload);
+      return response;
+    },
+    *updateAccount({ payload }, { call, put }) {
+      const response = yield call(updateAccount, payload);
+      return response;
+    },
+    *resetPassword({ payload }, { call, put }) {
+      const response = yield call(resetPassword, payload);
       return response;
     },
   },

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Breadcrumb, Table, Form, Input, Button, message } from 'antd';
-import AddUser from './components/addUser';
+import { Card, Breadcrumb, Table, Form, Input, Button, message, Modal } from 'antd';
+import AddOrEditUser from './components/addOrEditUser';
 import './index.less';
 
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 @connect(({ loading }) => ({
   loading: loading.effects['user/list'],
@@ -17,6 +18,7 @@ class Index extends Component {
     current: 1,
     total: 0,
     addUserVisible: false,
+    userInfo: {},
   }
 
   componentDidMount() {
@@ -44,37 +46,120 @@ class Index extends Component {
     });
   }
 
+  // 搜索
+  search = () => {
+    const values = this.props.form.getFieldsValue();
+    this.getTableData({
+      pageNumber: 1,
+      ...values,
+    });
+    this.setState({
+      current: 1,
+    });
+  }
+
+  // 重置
+  reset = () => {
+    this.props.form.resetFields();
+    this.getTableData({
+      pageNumber: 1,
+    });
+    this.setState({
+      current: 1,
+    });
+  }
+
   // 新增用户
   addUser = () => {
     this.setState({
       addUserVisible: true,
+      userInfo: {},
     });
+    this.addUserRef.props.form.resetFields();
   }
 
-  onAdd = (values) => {
-    this.props.dispatch({
-      type: 'user/addAccount',
-      payload: values,
-    }).then(res => {
-      if (res.data.success) {
-        message.success('新增用户成功！');
-        this.setState({
-          addUserVisible: false,
-          current: 1,
-        });
-        this.getTableData({
-          pageNumber: 1,
-        });
-      } else {
-        message.error(res.data.message);
-      }
+  // 修改用户信息
+  edit = (row) => {
+    this.setState({
+      addUserVisible: true,
+      userInfo: row,
     });
+    this.addUserRef.props.form.resetFields();
   }
 
+  // 新增/修改 提交
+  onOk = (values) => {
+    if (values.id) {
+      this.props.dispatch({
+        type: 'user/updateAccount',
+        payload: values,
+      }).then(res => {
+        if (res.data.success) {
+          message.success('修改用户信息成功！');
+          this.setState({
+            addUserVisible: false,
+            current: 1,
+          });
+          this.getTableData({
+            pageNumber: 1,
+          });
+        } else {
+          message.error(res.data.message);
+        }
+      });
+    } else {
+      this.props.dispatch({
+        type: 'user/addAccount',
+        payload: values,
+      }).then(res => {
+        if (res.data.success) {
+          message.success('新增用户成功！');
+          this.setState({
+            addUserVisible: false,
+            current: 1,
+          });
+          this.getTableData({
+            pageNumber: 1,
+          });
+        } else {
+          message.error(res.data.message);
+        }
+      });
+    }
+  }
 
+  // 重置用户密码
+  resetPassword = (row) => {
+    confirm({
+      title: '确认要重置此用户的密码？',
+      content: '该用户密码将重置为手机号后6位，请谨慎操作！',
+      okType: 'danger',
+      onOk: () => {
+        this.props.dispatch({
+          type: 'user/resetPassword',
+          payload: {
+            id: row.id,
+            mobile: row.mobile,
+          },
+        }).then(res => {
+          if (res.data.success) {
+            message.success(`用户${row.name}密码已重置`);
+            this.setState({
+              current: 1,
+            });
+            this.getTableData({
+              pageNumber: 1,
+            });
+          } else {
+            message.error(res.data.message);
+          }
+        });
+      },
+    });
+  }
 
   render() {
-    const { tableData, addUserVisible, current, total } = this.state;
+    const { tableData, addUserVisible, current, total, userInfo } = this.state;
     const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
     const columns = [{
@@ -93,20 +178,21 @@ class Index extends Component {
         return '-';
       },
     }, {
-      title: '出生日期',
-      dataIndex: 'birthday',
-    }, {
       title: '手机号',
       dataIndex: 'mobile',
+    }, {
+      title: '出生日期',
+      dataIndex: 'birthday',
     }, {
       title: '创建日期',
       dataIndex: 'created_at',
     }, {
       title: '操作',
-      render: () => {
+      render: (row) => {
         return (
-          <div>
-            <a>修改</a>
+          <div className="operation">
+            <a onClick={this.edit.bind(this, row)}>修改</a>
+            <a onClick={this.resetPassword.bind(this, row)}>重置密码</a>
           </div>
         );
       },
@@ -118,15 +204,20 @@ class Index extends Component {
           <Breadcrumb.Item>用户列表</Breadcrumb.Item>
         </Breadcrumb>
         <Card bordered={false} >
-          <Form layout="inline" onSubmit={this.handleSubmit} className="search">
+          <Form layout="inline" className="search">
             <FormItem label="姓名">
               {getFieldDecorator('userName')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
+            <FormItem label="手机号">
+              {getFieldDecorator('mobile')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
             <FormItem className="btn">
-              <Button type="primary">搜索</Button>
-              <Button>重置</Button>
+              <Button type="primary" onClick={this.search}>搜索</Button>
+              <Button onClick={this.reset}>重置</Button>
             </FormItem>
           </Form>
           <div className="add">
@@ -147,9 +238,11 @@ class Index extends Component {
             }}
           />
         </Card>
-        <AddUser
+        <AddOrEditUser
+          onRef={ref => this.addUserRef = ref}
           visible={addUserVisible}
-          onOk={this.onAdd}
+          userInfo={userInfo}
+          onOk={this.onOk}
           onClose={() => {
             this.setState({
               addUserVisible: false,

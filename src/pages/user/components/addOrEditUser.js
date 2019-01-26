@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button } from 'antd';
+import moment from 'moment';
 import './index.less';
 
 const FormItem = Form.Item;
@@ -12,31 +13,35 @@ const { Option } = Select;
 @Form.create()
 class componentName extends Component {
 
+  constructor(props) {
+    super(props);
+    this.props.onRef(this);
+  }
+
   handleSubmit = (e) => {
+    const { form, userInfo } = this.props;
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        values.id = userInfo.id;
         this.props.onOk(values);
       }
     });
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, onClose, userInfo } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
         {...this.props}
-        title="新增用户"
+        title={userInfo.id ? '修改用户信息' : '新增用户'}
         width={720}
         style={{
           overflow: 'auto',
           height: 'calc(100% - 108px)',
           paddingBottom: '108px',
         }}
-        // onClose={()=>{
-        //   this.props.form.resetFields();
-        // }}
       >
         <Alert className="add-user-alert" message="新增用户登录用户名为手机号，密码默认手机号后6位。" type="info" />
         <Form layout="vertical" onSubmit={this.handleSubmit}>
@@ -49,6 +54,7 @@ class componentName extends Component {
                   rules: [{
                     required: true, message: '请输入',
                   }],
+                  initialValue: userInfo.name,
                 })(
                   <Input />
                 )}
@@ -62,6 +68,7 @@ class componentName extends Component {
                   rules: [{
                     required: true, message: '请选择',
                   }],
+                  initialValue: userInfo.sex,
                 })(
                   <Select placeholder="请选择">
                     <Option value="male">男</Option>
@@ -81,6 +88,7 @@ class componentName extends Component {
                     pattern: /^1[34578]\d{9}$/,
                     message: '请输入正确手机号',
                   }],
+                  initialValue: userInfo.mobile,
                 })(
                   <Input />
                 )}
@@ -90,7 +98,9 @@ class componentName extends Component {
               <FormItem
                 label="出生年月"
               >
-                {getFieldDecorator('birthday')(
+                {getFieldDecorator('birthday', {
+                  initialValue: userInfo.birthday ? moment(userInfo.birthday) : undefined,
+                })(
                   <DatePicker
                     placeholder="请选择"
                     getCalendarContainer={(triggerNode) => triggerNode.parentNode}
@@ -101,7 +111,7 @@ class componentName extends Component {
             </Col>
           </Row>
           <FormItem className="submit-btns">
-            <Button>取消</Button>
+            <Button onClick={onClose}>取消</Button>
             <Button type="primary" htmlType="submit" loading={loading}>提交</Button>
           </FormItem>
         </Form>
