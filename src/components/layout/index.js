@@ -32,7 +32,7 @@ class componentName extends Component {
             GYM
           </div>
           <Menu 
-          theme="dark" mode="inline" defaultSelectedKeys={['1']}
+            theme="dark" mode="inline" defaultSelectedKeys={['1']}
           >
             <Menu.Item key="1">
               <Icon type="user" />
@@ -54,6 +54,16 @@ class componentName extends Component {
                 }}
               >
                 page2
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub2" title={<span><Icon type="mail" /><span>租户管理</span></span>}>
+              <Menu.Item
+                key="/tenantManage/message"
+                onClick={() => {
+                  this.props.dispatch(routerRedux.push('/tenantManage/message'));
+                }}
+              >
+              租户信息
               </Menu.Item>
             </SubMenu>
           </Menu>
