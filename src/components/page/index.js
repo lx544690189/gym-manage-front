@@ -16,7 +16,7 @@ class Page extends Component {
       className,
       router = [],
       children,
-    } = this.props
+    } = this.props;
     return (
       <div className={classnames('gym-page', className)}>
         {

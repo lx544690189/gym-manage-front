@@ -13,17 +13,10 @@ export default {
     },
     *userLogin({ payload }, { call, put }) {
       const response = yield call(userLogin, payload);
-      if (response.data.success) {
+      if (response.success) {
         yield put(routerRedux.replace('/'));
-        yield put({
-          type: 'global/setLoginState',
-          payload: {
-            login:true,
-            userInfo:response.data.data,
-          },
-        });
       } else {
-        message.error(response.data.message);
+        message.error(response.message);
       }
     },
   },

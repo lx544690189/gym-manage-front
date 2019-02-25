@@ -1,6 +1,8 @@
 {
   "extends": "eslint-config-umi",
   "rules":{
+    "semi": ["error", "always"],
+    "comma-spacing": 2,
     "indent": ["error", 2],
     "array-callback-return": [0],
     "react/sort-comp": [0],
