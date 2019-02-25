@@ -31,8 +31,8 @@ class Index extends Component {
       payload,
     }).then(res => {
       this.setState({
-        tableData: res.data.data.rows,
-        total: res.data.data.count,
+        tableData: res.data.rows,
+        total: res.data.count,
       });
     });
   }
