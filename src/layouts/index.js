@@ -16,9 +16,12 @@ moment.locale('zh-cn');
 class BasicLayout extends Component {
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'global/getUserInfo',
-    });
+    const { location, dispatch} = this.props;
+    if (!(location.pathname === '/login')) {
+      dispatch({
+        type: 'global/getBaseInfo',
+      });
+    }
   }
 
   renderContainer = () => {
@@ -36,7 +39,7 @@ class BasicLayout extends Component {
       </Layout>
     );
   }
-  
+
   render() {
     return (
       <LocaleProvider locale={zh_CN}>

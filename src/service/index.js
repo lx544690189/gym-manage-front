@@ -1,9 +1,9 @@
 import request from '../utils/axios';
 
-export function getUserInfo(params){
+export function getBaseInfo(params){
   return request({
     method: 'get',
-    url: '/account/getUserInfo',
+    url: '/account/getBaseInfo',
     params,
   });
 }
