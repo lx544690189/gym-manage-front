@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Breadcrumb, Table, Form, Input, Button, message, Modal } from 'antd';
+import { Card, Table, Form, Input, Button, message, Modal } from 'antd';
 import AddOrEditUser from './components/addOrEditUser';
+import { GymLayout, GymSearch } from 'gym';
 import './index.less';
 
-const FormItem = Form.Item;
 const confirm = Modal.confirm;
 
 @connect(({ loading }) => ({
@@ -47,8 +47,7 @@ class Index extends Component {
   }
 
   // 搜索
-  search = () => {
-    const values = this.props.form.getFieldsValue();
+  search = (values) => {
     this.getTableData({
       pageNumber: 1,
       ...values,
@@ -59,10 +58,11 @@ class Index extends Component {
   }
 
   // 重置
-  reset = () => {
+  reset = (values) => {
     this.props.form.resetFields();
     this.getTableData({
       pageNumber: 1,
+      ...values,
     });
     this.setState({
       current: 1,
@@ -161,7 +161,6 @@ class Index extends Component {
   render() {
     const { tableData, addUserVisible, current, total, userInfo } = this.state;
     const { loading } = this.props;
-    const { getFieldDecorator } = this.props.form;
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -197,32 +196,43 @@ class Index extends Component {
         );
       },
     }];
+    const searchItem = [{
+      label: '姓名',
+      key: 'userName',
+      render() {
+        return <Input placeholder="请输入" />;
+      },
+    }, {
+      label: '手机号',
+      key: 'mobile',
+      render() {
+        return <Input placeholder="请输入" />;
+      },
+    }, {
+      label: '手机号',
+      key: 'mobile1',
+      render() {
+        return <Input placeholder="请输入" />;
+      },
+    }, {
+      label: '手机号',
+      key: 'mobile2',
+      render() {
+        return <Input placeholder="请输入" />;
+      },
+    }];
+    const extendBtn = [
+      <Button key="add" type="primary" icon="plus" onClick={this.addUser}>新增</Button>,
+    ];
     return (
-      <div className="user-list">
-        <Breadcrumb>
-          <Breadcrumb.Item>用户管理</Breadcrumb.Item>
-          <Breadcrumb.Item>用户列表</Breadcrumb.Item>
-        </Breadcrumb>
+      <GymLayout className="user-list">
         <Card bordered={false} >
-          <Form layout="inline" className="search">
-            <FormItem label="姓名">
-              {getFieldDecorator('userName')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-            <FormItem label="手机号">
-              {getFieldDecorator('mobile')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-            <FormItem className="btn">
-              <Button type="primary" onClick={this.search}>搜索</Button>
-              <Button onClick={this.reset}>重置</Button>
-            </FormItem>
-          </Form>
-          <div className="add">
-            <Button type="primary" icon="plus" onClick={this.addUser}>新增</Button>
-          </div>
+          <GymSearch
+            searchItem={searchItem}
+            onSearch={this.search}
+            onReset={this.reset}
+            extendBtn={extendBtn}
+          />
           <Table
             rowKey="id"
             columns={columns}
@@ -249,7 +259,7 @@ class Index extends Component {
             });
           }}
         />
-      </div>
+      </GymLayout>
     );
   }
 }
