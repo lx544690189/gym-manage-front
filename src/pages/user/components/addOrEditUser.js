@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button } from 'antd';
+import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button, Upload, Icon, Modal } from 'antd';
 import moment from 'moment';
 import './index.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
-@connect(({ loading }) => ({
+@connect(({ loading, user, global }) => ({
   loading: loading.effects['user/addAccount'],
+  user,
+  global,
 }))
 @Form.create()
 class componentName extends Component {
@@ -24,14 +26,23 @@ class componentName extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.id = userInfo.id;
+        if(Array.isArray(values.userImg) && values.userImg.length > 0){
+          values.userImg = values.userImg[0].response.key;
+        }
         this.props.onOk(values);
       }
     });
   }
 
   render() {
-    const { loading, onClose, userInfo } = this.props;
-    const { getFieldDecorator } = this.props.form;
+    const { loading, onClose, userInfo, user, form, global } = this.props;
+    const { getFieldDecorator } = form;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    );
     return (
       <Drawer
         {...this.props}
@@ -46,6 +57,36 @@ class componentName extends Component {
         <Alert className="add-user-alert" message="新增用户登录用户名为手机号，密码默认手机号后6位。" type="info" />
         <Form layout="vertical" onSubmit={this.handleSubmit}>
           <Row gutter={40}>
+            <Col span={12}>
+              <FormItem
+                label="用户照片"
+              >
+                {getFieldDecorator('userImg', {
+                  rules: [{
+                    required: true, message: '请上传照片',
+                  }],
+                  valuePropName: 'fileList',
+                  getValueFromEvent: (e) => {
+                    if (Array.isArray(e)) {
+                      return e;
+                    }
+                    return e && e.fileList;
+                  },
+                  initialValue: userInfo.userImg ? [{uid: -1, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
+                })(
+                  <Upload
+                    action="http://upload.qiniup.com/"
+                    data={{
+                      token: global.qiniu.token,
+                    }}
+                    listType="picture-card"
+                    onPreview={this.handlePreview}
+                  >
+                    { form.getFieldValue('userImg').length === 1 ? null : uploadButton}
+                  </Upload>
+                )}
+              </FormItem>
+            </Col>
             <Col span={12}>
               <FormItem
                 label="姓名"
@@ -73,6 +114,22 @@ class componentName extends Component {
                   <Select placeholder="请选择">
                     <Option value="male">男</Option>
                     <Option value="female">女</Option>
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem
+                label="职位"
+              >
+                {getFieldDecorator('roleCode', {
+                  rules: [{
+                    required: true, message: '请选择',
+                  }],
+                  initialValue: userInfo.roleCode,
+                })(
+                  <Select placeholder="请选择">
+                    {user.roleList.map(item => <Option value={item.code} key={item.code}>{item.name}</Option>)}
                   </Select>
                 )}
               </FormItem>

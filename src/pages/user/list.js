@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Table, Form, Input, Button, message, Modal } from 'antd';
+import { Card, Table, Form, Input, Button, message, Modal, Select } from 'antd';
 import AddOrEditUser from './components/addOrEditUser';
 import { GymLayout, GymSearch } from 'gym';
 import './index.less';
 
 const confirm = Modal.confirm;
+const Option = Select.Option;
 
-@connect(({ loading }) => ({
+@connect(({ loading, user }) => ({
   loading: loading.effects['user/list'],
+  user,
 }))
 @Form.create()
 class Index extends Component {
@@ -23,8 +25,20 @@ class Index extends Component {
 
   componentDidMount() {
     this.getTableData();
+    this.getRoleList();
   }
 
+  // 获取角色列表
+  getRoleList = () => {
+    this.props.dispatch({
+      type: 'user/roleList',
+      payload: {
+        pageSize: 100,
+      },
+    });
+  }
+
+  // 获取table数据
   getTableData = (payload) => {
     this.props.dispatch({
       type: 'user/list',
@@ -94,7 +108,7 @@ class Index extends Component {
         type: 'user/updateAccount',
         payload: values,
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           message.success('修改用户信息成功！');
           this.setState({
             addUserVisible: false,
@@ -104,7 +118,7 @@ class Index extends Component {
             pageNumber: 1,
           });
         } else {
-          message.error(res.data.message);
+          message.error(res.message);
         }
       });
     } else {
@@ -112,7 +126,7 @@ class Index extends Component {
         type: 'user/addAccount',
         payload: values,
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           message.success('新增用户成功！');
           this.setState({
             addUserVisible: false,
@@ -122,7 +136,7 @@ class Index extends Component {
             pageNumber: 1,
           });
         } else {
-          message.error(res.data.message);
+          message.error(res.message);
         }
       });
     }
@@ -142,7 +156,7 @@ class Index extends Component {
             mobile: row.mobile,
           },
         }).then(res => {
-          if (res.data.success) {
+          if (res.success) {
             message.success(`用户${row.name}密码已重置`);
             this.setState({
               current: 1,
@@ -151,7 +165,7 @@ class Index extends Component {
               pageNumber: 1,
             });
           } else {
-            message.error(res.data.message);
+            message.error(res.message);
           }
         });
       },
@@ -160,7 +174,7 @@ class Index extends Component {
 
   render() {
     const { tableData, addUserVisible, current, total, userInfo } = this.state;
-    const { loading } = this.props;
+    const { loading, user } = this.props;
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -203,20 +217,18 @@ class Index extends Component {
         return <Input placeholder="请输入" />;
       },
     }, {
+      label: '职位',
+      key: 'roleCode',
+      render() {
+        return (
+          <Select placeholder="请选择" >
+            {user.roleList.map(item => <Option value={item.code} key={item.code}>{item.name}</Option>)}
+          </Select>
+        );
+      },
+    }, {
       label: '手机号',
       key: 'mobile',
-      render() {
-        return <Input placeholder="请输入" />;
-      },
-    }, {
-      label: '手机号',
-      key: 'mobile1',
-      render() {
-        return <Input placeholder="请输入" />;
-      },
-    }, {
-      label: '手机号',
-      key: 'mobile2',
       render() {
         return <Input placeholder="请输入" />;
       },

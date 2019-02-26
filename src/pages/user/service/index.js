@@ -35,3 +35,11 @@ export function resetPassword(data){
     data,
   });
 }
+
+// 获取角色列表
+export function roleList(params){
+  return request({
+    url: '/role/list',
+    params,
+  });
+}
