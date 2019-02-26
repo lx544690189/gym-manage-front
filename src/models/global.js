@@ -7,6 +7,7 @@ export default {
   state: {
     userInfo: {},
     menu: {},
+    qiniu: {},
   },
   effects: {
     *setLoginState({ payload }, { call, put }) {
