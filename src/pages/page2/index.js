@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { Card, Breadcrumb, Upload, Icon, Modal } from 'antd';
 import { GymLayout } from 'gym';
 
+@connect(({ global }) => ({
+  global,
+}))
 class Index extends Component {
   state = {
     fileList: [],
@@ -11,7 +15,8 @@ class Index extends Component {
     console.log('fileList: ', fileList);
   }
   render() {
-    const {fileList} = this.state;
+    const { fileList } = this.state;
+    const { global } = this.props;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -24,7 +29,7 @@ class Index extends Component {
           <Upload
             action="http://upload.qiniup.com/"
             data={{
-              token: 'mXwjcgGVXFTqgbZf-aogv_mbmD0lKFePOw-spOu0:V0k__e4hANWdZOxv-gmFDnERoVg=:eyJyZXR1cm5Cb2R5Ijoie1wibmFtZVwiOlwiJChmbmFtZSlcIixcInNpemVcIjpcIiQoZnNpemUpXCIsXCJ3aWR0aFwiOlwiJChpbWFnZUluZm8ud2lkdGgpXCIsXCJoZWlnaHRcIjpcIiQoaW1hZ2VJbmZvLmhlaWdodClcIixcImltYWdlQXZlXCI6XCIkKGltYWdlQXZlLlJHQilcIixcInR5cGVcIjpcIiQobWltZVR5cGUpXCIsXCJrZXlcIjpcIiQoa2V5KVwiLFwiaGFzaFwiOlwiJChldGFnKVwiLFwiYnVja2V0XCI6XCIkKGJ1Y2tldClcIn0iLCJzY29wZSI6Imd5bS1yZXNvdXJjZXMiLCJkZWFkbGluZSI6MTU1MDgxNTgxN30=',
+              token: global.qiniu.token,
             }}
             multiple
             listType="picture-card"
