@@ -27,7 +27,11 @@ class componentName extends Component {
       if (!err) {
         values.id = userInfo.id;
         if(Array.isArray(values.userImg) && values.userImg.length > 0){
-          values.userImg = values.userImg[0].url.split('http://pn7nap6j5.bkt.clouddn.com/')[1];
+          if(values.userImg[0].response){
+            values.userImg = values.userImg[0].response.key;
+          }else{
+            values.userImg = values.userImg[0].url.split('http://pn7nap6j5.bkt.clouddn.com/')[1];
+          }
         }
         this.props.onOk(values);
       }
@@ -67,13 +71,10 @@ class componentName extends Component {
                   }],
                   valuePropName: 'fileList',
                   getValueFromEvent: (e) => {
-                    console.log('e: ', e);
-                    if(e.file && e.file.status === 'done'){
-                      return {
-                        uid: e.file.response.key,
-                        url: `http://pn7nap6j5.bkt.clouddn.com/${e.file.response.key}`,
-                      };
+                    if (Array.isArray(e)) {
+                      return e;
                     }
+                    return e && e.fileList;
                   },
                   initialValue: userInfo.userImg ? [{uid: userInfo.userImg, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
                 })(
