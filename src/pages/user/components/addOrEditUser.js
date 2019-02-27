@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button, Upload, Icon, Modal } from 'antd';
+import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button, Upload, Icon } from 'antd';
 import moment from 'moment';
 import './index.less';
 
@@ -27,7 +27,7 @@ class componentName extends Component {
       if (!err) {
         values.id = userInfo.id;
         if(Array.isArray(values.userImg) && values.userImg.length > 0){
-          values.userImg = values.userImg[0].response.key;
+          values.userImg = values.userImg[0].url.split('http://pn7nap6j5.bkt.clouddn.com/')[1];
         }
         this.props.onOk(values);
       }
@@ -50,7 +50,7 @@ class componentName extends Component {
         width={720}
         style={{
           overflow: 'auto',
-          height: 'calc(100% - 108px)',
+          height: 'calc(100% - 55px)',
           paddingBottom: '108px',
         }}
       >
@@ -67,12 +67,15 @@ class componentName extends Component {
                   }],
                   valuePropName: 'fileList',
                   getValueFromEvent: (e) => {
-                    if (Array.isArray(e)) {
-                      return e;
+                    console.log('e: ', e);
+                    if(e.file && e.file.status === 'done'){
+                      return {
+                        uid: e.file.response.key,
+                        url: `http://pn7nap6j5.bkt.clouddn.com/${e.file.response.key}`,
+                      };
                     }
-                    return e && e.fileList;
                   },
-                  initialValue: userInfo.userImg ? [{uid: -1, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
+                  initialValue: userInfo.userImg ? [{uid: userInfo.userImg, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
                 })(
                   <Upload
                     action="http://upload.qiniup.com/"

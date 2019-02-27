@@ -194,6 +194,13 @@ class Index extends Component {
       title: '手机号',
       dataIndex: 'mobile',
     }, {
+      title: '职位',
+      dataIndex: 'roleCode',
+      render: (text, record) => {
+        const role = user.roleList.find(item => item.code === text) || {};
+        return role.name;
+      },
+    }, {
       title: '出生日期',
       dataIndex: 'birthday',
     }, {
@@ -212,7 +219,7 @@ class Index extends Component {
     }];
     const searchItem = [{
       label: '姓名',
-      key: 'userName',
+      key: 'name',
       render() {
         return <Input placeholder="请输入" />;
       },
@@ -221,7 +228,7 @@ class Index extends Component {
       key: 'roleCode',
       render() {
         return (
-          <Select placeholder="请选择" >
+          <Select placeholder="请选择" allowClear>
             {user.roleList.map(item => <Option value={item.code} key={item.code}>{item.name}</Option>)}
           </Select>
         );
