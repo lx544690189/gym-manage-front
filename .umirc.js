@@ -5,6 +5,7 @@ export default {
   alias:{
     'src': path.resolve(__dirname, './src'),
     'gym': path.resolve(__dirname, './src/components'),
+    'utils': path.resolve(__dirname, './src/utils/tools'),
   },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
