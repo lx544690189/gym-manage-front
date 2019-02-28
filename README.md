@@ -50,7 +50,8 @@ alias:{
 import { GymLayout, GymSearch } from 'gym';
 ```
 
-- ### 不喜欢CSS-in-JS？在.umirc.js中增加配置`disableCSSModules: true`，每个页面`import 'page.less'`然后在`page.less`中约定页面名称为当前page的className，同样能防止样式和冲突：
+- **不喜欢CSS-in-JS？**
+在.umirc.js中增加配置`disableCSSModules: true`，每个页面`import 'page.less'`然后在`page.less`中约定页面名称为当前page的className，同样能防止样式和冲突：
 ```css
 .page1{
   .class1{
