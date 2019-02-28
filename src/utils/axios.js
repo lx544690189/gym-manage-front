@@ -8,9 +8,9 @@ const request = axios.create({
 });
 
 // 添加响应拦截器
-request.interceptors.response.use(function (response) {
+request.interceptors.response.use(function(response) {
   return response.data;
-}, function (error, data) {
+}, function(error, data) {
   if (error.response.status === 403 && error.response.data.code === 4031) {
     // 如何访问到 store 或 dispatch 方法？https://umijs.org/zh/guide/with-dva.html#faq
     window.g_app._store.dispatch(
