@@ -3,6 +3,7 @@ module.exports = {
   "rules": {
     "indent": ["error", 2], //缩进风格
     "semi": [2, "always"], // 句尾强制分号
+    "eqeqeq": 2, // 要求使用 === 和 !==
     "no-alert": [2], // 禁止使用alert confirm prompt
     "quotes": [2, "single"], // 单引号
     "arrow-parens": 2, //箭头函数用小括号括起来
