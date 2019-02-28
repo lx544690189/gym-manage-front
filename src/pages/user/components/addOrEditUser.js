@@ -67,7 +67,7 @@ class componentName extends Component {
               >
                 {getFieldDecorator('userImg', {
                   rules: [{
-                    required: true, message: '请上传照片',
+                    equired: true, message: '请上传照片',
                   }],
                   valuePropName: 'fileList',
                   getValueFromEvent: (e) => {
@@ -133,7 +133,7 @@ class componentName extends Component {
                   initialValue: userInfo.roleCode,
                 })(
                   <Select placeholder="请选择">
-                    {user.roleList.map(item => <Option value={item.code} key={item.code}>{item.name}</Option>)}
+                    {user.roleList.map((item) => <Option value={item.code} key={item.code}>{item.name}</Option>)}
                   </Select>
                 )}
               </FormItem>

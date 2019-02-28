@@ -43,7 +43,7 @@ class Index extends Component {
     this.props.dispatch({
       type: 'user/list',
       payload,
-    }).then(res => {
+    }).then((res) => {
       this.setState({
         tableData: res.data.rows,
         total: res.data.count,
@@ -107,7 +107,7 @@ class Index extends Component {
       this.props.dispatch({
         type: 'user/updateAccount',
         payload: values,
-      }).then(res => {
+      }).then((res) => {
         if (res.success) {
           message.success('修改用户信息成功！');
           this.setState({
@@ -125,7 +125,7 @@ class Index extends Component {
       this.props.dispatch({
         type: 'user/addAccount',
         payload: values,
-      }).then(res => {
+      }).then((res) => {
         if (res.success) {
           message.success('新增用户成功！');
           this.setState({
@@ -155,7 +155,7 @@ class Index extends Component {
             id: row.id,
             mobile: row.mobile,
           },
-        }).then(res => {
+        }).then((res) => {
           if (res.success) {
             message.success(`用户${row.name}密码已重置`);
             this.setState({
@@ -197,7 +197,7 @@ class Index extends Component {
       title: '职位',
       dataIndex: 'roleCode',
       render: (text, record) => {
-        const role = user.roleList.find(item => item.code === text) || {};
+        const role = user.roleList.find((item) => item.code === text) || {};
         return role.name;
       },
     }, {
@@ -229,7 +229,7 @@ class Index extends Component {
       render() {
         return (
           <Select placeholder="请选择" allowClear>
-            {user.roleList.map(item => <Option value={item.code} key={item.code}>{item.name}</Option>)}
+            {user.roleList.map((item) => <Option value={item.code} key={item.code}>{item.name}</Option>)}
           </Select>
         );
       },
@@ -241,7 +241,8 @@ class Index extends Component {
       },
     }];
     const extendBtn = [
-      <Button key="add" type="primary" icon="plus" onClick={this.addUser}>新增</Button>,
+      <Button key="add" type="primary" icon="plus"
+        onClick={this.addUser}>新增</Button>,
     ];
     return (
       <GymLayout className="user-list">
@@ -268,7 +269,7 @@ class Index extends Component {
           />
         </Card>
         <AddOrEditUser
-          onRef={ref => this.addUserRef = ref}
+          onRef={(ref) => this.addUserRef = ref}
           visible={addUserVisible}
           userInfo={userInfo}
           onOk={this.onOk}

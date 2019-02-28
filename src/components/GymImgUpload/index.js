@@ -35,7 +35,7 @@ class GymImgUpload extends Component {
     if ('value' in nextProps) {
       const value = nextProps.value;
       if (Array.isArray(value)) {
-        const fileList = value.map(key => {
+        const fileList = value.map((key) => {
           return {
             uid: guid(),
             status: 'done',
@@ -76,7 +76,7 @@ class GymImgUpload extends Component {
   handleChange = ({ fileList, file }) => {
     if(file.status === 'done'){
       setTimeout(() => {
-        const convertFileList = fileList.map(item => {
+        const convertFileList = fileList.map((item) => {
           if(item.status === 'done'){
             console.log('item: ', JSON.parse(JSON.stringify(item)));
             return {
@@ -90,7 +90,7 @@ class GymImgUpload extends Component {
         this.setState(
           {
             fileList: convertFileList,
-          }, 
+          },
           this.triggerChange
         );
       }, 1000);
@@ -110,7 +110,7 @@ class GymImgUpload extends Component {
     );
     return (
       <div
-        className={classnames("clearfix", "gym-img-upload", className)}
+        className={classnames('clearfix', 'gym-img-upload', className)}
       >
         <Upload
           action={UPLOADURL}
