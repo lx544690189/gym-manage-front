@@ -51,6 +51,7 @@ import { GymLayout, GymSearch } from 'gym';
 ```
 
 - **不喜欢CSS-in-JS？**
+
 在.umirc.js中增加配置`disableCSSModules: true`，每个页面`import 'page.less'`然后在`page.less`中约定页面名称为当前page的className，同样能防止样式和冲突：
 ```css
 .page1{
@@ -92,6 +93,7 @@ render() {
 ```
 
 - **善用dva-loading**
+
 页面上很多异步加载的地方都需要有loading效果来作友好提示，告诉用户数据正在加载。比如一个table中数据的获取，或者点击提交按钮后使用loading并防止用户多次提交，dva-loading可以帮我们减少很多实现loading的代码。
 ```javascript
 import React, { Component } from 'react';
