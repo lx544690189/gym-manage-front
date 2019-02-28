@@ -36,7 +36,7 @@ $ npm run dev
 ```
 
 ## coding的姿势要优雅
- - ### 配置alias方便import：
+ - **配置alias方便import：** 
 ```javascript
 alias:{
   'src': path.resolve(__dirname, './src'),
@@ -62,14 +62,14 @@ import { GymLayout, GymSearch } from 'gym';
 }
 ```
 
-- ### 每次这么拼className？使用[classnames](https://www.npmjs.com/package/classnames)简化代码
+- **每次这么拼className？使用[classnames](https://www.npmjs.com/package/classnames)简化代码**
 ```
 // <div className={condition ? 'class-default' : 'class-default class-more'}>
 import classnames from 'classnames';
 <div classNames('class-default', { 'class-more': condition });>
 ```
 
-- ### 封装的组件带上`props`中的`className`，方便使用时样式覆盖
+- **封装的组件带上`props`中的`className`，方便使用时样式覆盖**
 ```javascript
 // 组件
 class MyComponent extends Component{
@@ -90,7 +90,7 @@ render() {
 }
 ```
 
-- ### 善用dva-loading
+- **善用dva-loading**
 页面上很多异步加载的地方都需要有loading效果来作友好提示，告诉用户数据正在加载。比如一个table中数据的获取，或者点击提交按钮后使用loading并防止用户多次提交，dva-loading可以帮我们减少很多实现loading的代码。
 ```javascript
 import React, { Component } from 'react';
@@ -111,7 +111,7 @@ class demo extends Component{
 }
 ```
 
-- ### [umi与dva的整合，外部如何访问到 store 或 dispatch 方法？](https://umijs.org/zh/guide/with-dva.html#faq)
+- **[umi与dva的整合，外部如何访问到 store 或 dispatch 方法？](https://umijs.org/zh/guide/with-dva.html#faq)**
 ```javascript
 // 如在axios拦截器中，监听登录状态，在未登录情况下跳转登录页面
 request.interceptors.response.use(function(response) {
