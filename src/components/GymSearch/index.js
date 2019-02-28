@@ -58,10 +58,14 @@ class GymSearch extends Component {
     const { className, searchItem } = this.props;
 
     return (
-      <Form onSubmit={this.handleSearch} layout="inline" className={classnames("gym-search", className)}>
+      <Form
+        onSubmit={this.handleSearch}
+        layout="inline"
+        className={classnames('gym-search', className)}
+      >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           {
-            searchItem.slice(0, 2).map(item => (
+            searchItem.slice(0, 2).map((item) => (
               <Col md={8} sm={24} key={item.key}>
                 <FormItem label={item.label} {...formItemLayout}>
                   {getFieldDecorator(item.key, item.options)(
@@ -99,10 +103,14 @@ class GymSearch extends Component {
     const { searchItem } = this.props;
 
     return (
-      <Form onSubmit={this.handleSearch} layout="inline" className="gym-search">
+      <Form
+        onSubmit={this.handleSearch}
+        layout="inline"
+        className="gym-search"
+      >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           {
-            searchItem.map(item => (
+            searchItem.map((item) => (
               <Col md={8} sm={24} key={item.key}>
                 <FormItem label={item.label} {...formItemLayout}>
                   {getFieldDecorator(item.key, item.options)(
@@ -139,7 +147,7 @@ class GymSearch extends Component {
         {expand ? this.renderAdvancedForm() : this.renderSimpleForm()}
         {extendBtn && (
           <div className="gym-search-extend-btn">
-            {extendBtn.map(item => item)}
+            {extendBtn.map((item) => item)}
           </div>
         )}
       </React.Fragment>
