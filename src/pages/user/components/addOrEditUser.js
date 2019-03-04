@@ -24,6 +24,7 @@ class componentName extends Component {
     const { form, userInfo } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log('values: ', values);
       if (!err) {
         values.id = userInfo.id;
         if(Array.isArray(values.userImg) && values.userImg.length > 0){
@@ -67,14 +68,13 @@ class componentName extends Component {
               >
                 {getFieldDecorator('userImg', {
                   rules: [{
-                    equired: true, message: '请上传照片',
+                    required: true, message: '请上传照片',
                   }],
                   valuePropName: 'fileList',
                   getValueFromEvent: (e) => {
-                    if (Array.isArray(e)) {
-                      return e;
+                    if(e && e.fileList){
+                      return e.fileList;
                     }
-                    return e && e.fileList;
                   },
                   initialValue: userInfo.userImg ? [{uid: userInfo.userImg, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
                 })(
