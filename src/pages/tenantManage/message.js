@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Card, Breadcrumb, Table, Form, Input, Button, Drawer, Cascader } from 'antd';
+import { Card, Breadcrumb, Table, Form, Input, Button } from 'antd';
 import { connect } from 'dva';
+import  AddOrEditTenant from './components/addOrEdit'
 import './index.less';
 
 @connect()
@@ -10,11 +11,11 @@ class Index extends Component {
   state = {
     tableData: [],
     visible: false,
+    tenantInfo:{},
     options: [],
   }
   componentDidMount() {
     this.getTableData();
-   
   }
   //获取地址
   getAdress = (payload) => {
@@ -71,12 +72,13 @@ class Index extends Component {
       visible: false,
     })
   }
+  
   onChange=(value)=>{
     console.log(value);
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { tableData } = this.state;
+    const { tableData, visible, options, tenantInfo } = this.state;
     const columns = [{
       title: '公司名',
       dataIndex: 'tenantName',
@@ -142,55 +144,15 @@ class Index extends Component {
             rowClassName="editable-row"
           />
         </Card>
-        <Drawer
-          title="新增用户"
-          width={720}
+        <AddOrEditTenant
+          visible={visible}
+          options={options}
           onClose={this.onClose}
-          visible={this.state.visible}
-          style={{
-            overflow: 'auto',
-            height: 'calc(100% - 108px)',
-            paddingBottom: '108px',
-          }}
+          onChange={this.onChange}
+          tenantInfo={tenantInfo}
         >
-          <Form layout="inline">
-            <Form.Item
-              label="公司名"
-            >
-              {getFieldDecorator('tenantName')(
-                <Input type="text" placehoder="请输入" />)}
-            </Form.Item>
-            <Form.Item
-              label="联系人"
-            >
-              {getFieldDecorator('userName')(
-                <Input type="text" placehoder="请输入" />)}
-            </Form.Item>
-            <Form.Item
-              label="联系电话"
-            >
-              {getFieldDecorator('userMobile')(
-                <Input type="text" placehoder="请输入" />)}
-            </Form.Item>
-            <Form.Item
-              label="客服电话"
-            >
-              {getFieldDecorator('tenantPhone')(
-                <Input type="text" placehoder="请输入" />)}
-            </Form.Item>
-            <Form.Item
-              label="地址"
-            >
-              <Cascader options={this.state.options} onChange={this.onChange} placeholder="请选择" />
-            </Form.Item>
-            <Form.Item >
-              <Button type="primary" onClick={this.search}>取消</Button>
-            </Form.Item>
-            <Form.Item >
-              <Button type="primary" onClick={this.reset}>提交</Button>
-            </Form.Item>
-          </Form>
-        </Drawer>
+
+        </AddOrEditTenant>
       </div>
     );
   }
