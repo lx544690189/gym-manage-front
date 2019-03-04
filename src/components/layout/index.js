@@ -5,7 +5,7 @@ import { connect } from 'dva';
 import Header from './header';
 import './index.less';
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 @connect()
@@ -31,8 +31,10 @@ class componentName extends Component {
           <div className="logo">
             GYM
           </div>
-          <Menu 
-            theme="dark" mode="inline" defaultSelectedKeys={['1']}
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={['1']}
           >
             <Menu.Item key="1">
               <Icon type="user" />

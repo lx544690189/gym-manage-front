@@ -28,7 +28,7 @@ class componentName extends Component {
     );
 
     return (
-      <Header style={{ background: '#fff', padding: 0 }}>
+      <Header className="gym-header">
         <Icon
           className="trigger"
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
