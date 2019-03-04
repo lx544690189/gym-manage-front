@@ -68,6 +68,16 @@ class componentName extends Component {
               租户信息
               </Menu.Item>
             </SubMenu>
+            <SubMenu key="system" title={<span><Icon type="mail" /><span>系统配置</span></span>}>
+              <Menu.Item
+                key="/menu/list"
+                onClick={() => {
+                  this.props.dispatch(routerRedux.push('/menu/list'));
+                }}
+              >
+              菜单配置
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout
