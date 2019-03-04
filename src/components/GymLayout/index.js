@@ -6,30 +6,26 @@ import './index.less';
 
 const BreadcrumbItem = Breadcrumb.Item;
 
-class Page extends Component {
-  state={
-    
+class GymLayout extends Component {
+  state = {
+
   }
 
   render() {
     const {
       className,
-      router = [],
       children,
-    } = this.props
+    } = this.props;
     return (
       <div className={classnames('gym-page', className)}>
-        {
-          router.length > 0 && (
-            <Breadcrumb>
-              <BreadcrumbItem>用户管理</BreadcrumbItem>
-            </Breadcrumb>
-          )
-        }
+        <Breadcrumb>
+          <BreadcrumbItem>用户管理</BreadcrumbItem>
+          <BreadcrumbItem>用户列表</BreadcrumbItem>
+        </Breadcrumb>
         {children}
       </div>
     );
   }
 }
 
-export default Page;
+export default GymLayout;

@@ -1,8 +1,15 @@
-import { accountList, addAccount, updateAccount, resetPassword } from '../service';
+import {
+  accountList,
+  addAccount,
+  updateAccount,
+  resetPassword,
+  roleList,
+} from '../service';
 
 export default {
   namespace: 'user',
   state: {
+    roleList: [],
   },
   effects: {
     *list({ payload }, { call, put }) {
@@ -21,7 +28,23 @@ export default {
       const response = yield call(resetPassword, payload);
       return response;
     },
+    *roleList({ payload }, { call, put }) {
+      const response = yield call(roleList, payload);
+      yield put({
+        type: 'updateState',
+        payload: {
+          roleList: response.data.rows,
+        },
+      });
+      return response;
+    },
   },
   reducers: {
+    updateState(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
   },
 };

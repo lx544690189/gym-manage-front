@@ -4,6 +4,8 @@ import path from 'path';
 export default {
   alias:{
     'src': path.resolve(__dirname, './src'),
+    'gym': path.resolve(__dirname, './src/components'),
+    'utils': path.resolve(__dirname, './src/utils/tools'),
   },
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
@@ -22,13 +24,9 @@ export default {
   disableCSSModules: true,
   proxy: {
     "/gym": {
-      "target": "http://192.168.0.108:7001/",
+      "target": "http://127.0.0.1:7001/",
       "changeOrigin": true,
       "pathRewrite": { "^/gym": "" }
     },
-    "/account": {
-      "target": "http://192.168.0.108:7001/",
-      "changeOrigin": true,
-    }
   }
 }
