@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button, Upload, Icon } from 'antd';
+import { Row, Col, Select, Form, Input, DatePicker, Drawer, Alert, Button, Upload, Icon, Modal } from 'antd';
 import moment from 'moment';
 import './index.less';
 
@@ -15,6 +15,11 @@ const { Option } = Select;
 @Form.create()
 class componentName extends Component {
 
+  state = {
+    previewVisible: false,
+    previewImage: '',
+  }
+
   constructor(props) {
     super(props);
     this.props.onRef(this);
@@ -24,13 +29,12 @@ class componentName extends Component {
     const { form, userInfo } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      console.log('values: ', values);
       if (!err) {
         values.id = userInfo.id;
-        if(Array.isArray(values.userImg) && values.userImg.length > 0){
-          if(values.userImg[0].response){
+        if (Array.isArray(values.userImg) && values.userImg.length > 0) {
+          if (values.userImg[0].response) {
             values.userImg = values.userImg[0].response.key;
-          }else{
+          } else {
             values.userImg = values.userImg[0].url.split('http://pn7nap6j5.bkt.clouddn.com/')[1];
           }
         }
@@ -39,9 +43,21 @@ class componentName extends Component {
     });
   }
 
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleCancel = () => {
+    this.setState({ previewVisible: false });
+  }
+
   render() {
     const { loading, onClose, userInfo, user, form, global } = this.props;
     const { getFieldDecorator } = form;
+    const { previewVisible, previewImage } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -72,11 +88,11 @@ class componentName extends Component {
                   }],
                   valuePropName: 'fileList',
                   getValueFromEvent: (e) => {
-                    if(e && e.fileList){
+                    if (e && e.fileList) {
                       return e.fileList;
                     }
                   },
-                  initialValue: userInfo.userImg ? [{uid: userInfo.userImg, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}`}] : [],
+                  initialValue: userInfo.userImg ? [{ uid: userInfo.userImg, url: `http://pn7nap6j5.bkt.clouddn.com/${userInfo.userImg}` }] : [],
                 })(
                   <Upload
                     action="http://upload.qiniup.com/"
@@ -86,7 +102,7 @@ class componentName extends Component {
                     listType="picture-card"
                     onPreview={this.handlePreview}
                   >
-                    { form.getFieldValue('userImg').length === 1 ? null : uploadButton}
+                    {form.getFieldValue('userImg').length === 1 ? null : uploadButton}
                   </Upload>
                 )}
               </FormItem>
@@ -176,6 +192,9 @@ class componentName extends Component {
             <Button type="primary" htmlType="submit" loading={loading}>提交</Button>
           </FormItem>
         </Form>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
       </Drawer>
     );
   }
