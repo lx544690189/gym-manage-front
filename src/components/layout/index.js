@@ -68,6 +68,16 @@ class componentName extends Component {
               租户信息
               </Menu.Item>
             </SubMenu>
+            <SubMenu key="sub3" title={<span><Icon type="mail" /><span>角色管理</span></span>}>
+              <Menu.Item
+                key="/roleManage/list"
+                onClick={() => {
+                  this.props.dispatch(routerRedux.push('/roleManage/list'));
+                }}
+              >
+              角色信息
+              </Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout

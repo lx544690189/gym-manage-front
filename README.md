@@ -42,6 +42,7 @@ alias:{
   'src': path.resolve(__dirname, './src'),
   'gym': path.resolve(__dirname, './src/components'),
   'utils': path.resolve(__dirname, './src/utils/tools'),
+  'request': path.resolve(__dirname, './src/utils/axios'),
 },
 ```
 现在import无需关注目录层级：

@@ -1,84 +1,134 @@
 import React, { Component } from 'react';
 import { Card, Breadcrumb, Table, Form, Input, Button } from 'antd';
 import { connect } from 'dva';
-import  AddOrEditTenant from './components/addOrEdit'
+import AddOrEditTenant from './components/addOrEdit';
 import './index.less';
 
-@connect()
+@connect(({tenant, loading })=>({
+  tenant,
+  loading: loading.models.tenant,
+}))
 @Form.create()
 class Index extends Component {
-
   state = {
     tableData: [],
     visible: false,
-    tenantInfo:{},
     options: [],
+    tenantInfo: {},
+    total: 0,
+    current: 1,
   }
   componentDidMount() {
     this.getTableData();
   }
-  //获取地址
-  getAdress = (payload) => {
+  // 获取地址
+  getAddress = (payload) => {
     this.props.dispatch({
       type: 'tenant/addressList',
       payload,
-    }).then(res => {
+    }).then((res) => {
       this.setState({
-        options: res.data.data,
+        options: res.data,
       });
     });
   }
-  //获取表格数据
+  // 获取表格数据
   getTableData = (payload) => {
     this.props.dispatch({
       type: 'tenant/list',
       payload,
-    }).then(res => {
-      res.data.data.rows.forEach(item => {
-        item.address = item.province + item.city + item.district + item.address
+    }).then((res) => {
+      const data = [...res.data.rows];
+      data.forEach((item) => {
+        item.addressDetails = item.province + item.city + item.district + item.address;
       });
       this.setState({
-        tableData: res.data.data.rows,
+        tableData: data,
+        total: res.data.count,
       });
     });
   }
-  //搜索
+  // 新增租户信息
+  addTenantInfo = (data) => {
+    this.props.dispatch({
+      type: 'tenant/addTenantInfo',
+      payload: data,
+    }).then((res) => {
+      if (res.success) {
+        this.setState({
+          visible: false,
+        });
+        this.getTableData();
+      }
+    });
+  }
+  // 修改
+  editTenantInfo=(data)=>{
+    this.props.dispatch({
+      type: 'tenant/editTenantInfo',
+      payload: data,
+    }).then((res)=>{
+      if (res.success) {
+        this.setState({
+          visible: false,
+        });
+        this.getTableData();
+      }
+    });
+  }
+  // 跳转页
+  onChange=(e)=>{
+    this.setState({
+      current: e,
+    });
+    this.getTableData({pageNumber: e});
+  }
+  // 搜索
   search = () => {
     const formSearch = this.props.form.getFieldsValue();
     this.getTableData({
       pageNumber: 1,
       ...formSearch,
     });
-  }
-  //重置
-  reset = () => {
-    this.props.form.resetFields()
-    this.getTableData();
-  }
-  //修改
-  edit = () => {
-
-  }
-  //新增
-  newAdd = () => {
     this.setState({
-      visible: true,
-    })
-    this.getAdress()
+      current: 1,
+    });
   }
-  //关闭弹窗
+  // 重置
+  reset = () => {
+    this.props.form.resetFields();
+    this.getTableData();
+    this.setState({
+      current: 1,
+    });
+  }
+  // 修改或新增
+  editOrAdd = (value) => {
+    if(value){
+      this.setState({
+        tenantInfo: value,
+        visible: true,
+        current: 1,
+      });
+    }else{
+      this.setState({
+        visible: true,
+        current: 1,
+      });
+    }
+    this.getAddress();
+  }
+  // 关闭弹窗
   onClose = () => {
+    this.formRef.props.form.resetFields();
     this.setState({
       visible: false,
-    })
-  }
-  
-  onChange=(value)=>{
-    console.log(value);
+    });
   }
   render() {
+    const {loading}=this.props;
     const { getFieldDecorator } = this.props.form;
-    const { tableData, visible, options, tenantInfo } = this.state;
+    const { tableData, visible, options, tenantInfo, rowEditInfo, total, current} = this.state;
     const columns = [{
       title: '公司名',
       dataIndex: 'tenantName',
@@ -97,13 +147,13 @@ class Index extends Component {
       key: 'tenantPhone',
     }, {
       title: '地址',
-      dataIndex: 'address',
+      dataIndex: 'addressDetails',
       key: 'addressDetails',
     }, {
       title: '操作',
-      render: () => (
+      render: (text, record) => (
         <div>
-          <a onClick={this.edit}>修改</a>
+          <a onClick={() => this.editOrAdd(record)}>修改</a>
         </div>
       ),
     },
@@ -137,19 +187,27 @@ class Index extends Component {
               <Button type="primary" onClick={this.reset}>重置</Button>
             </Form.Item>
           </Form>
-          <Button type="primary" icon="plus" className="newAddBtn" onClick={this.newAdd}>新增</Button>
+          <Button type="primary" icon="plus" className="newAddBtn"
+            onClick={this.editOrAdd}>新增</Button>
           <Table
             columns={columns}
             dataSource={tableData}
+            loading={loading}
+            pagination= {{total, current, showTotal: (total) => `共 ${total} 条`, onChange: this.onChange}}
+            rowKey={(record) => record.id}
             rowClassName="editable-row"
+            rowEditInfo={rowEditInfo}
           />
         </Card>
         <AddOrEditTenant
           visible={visible}
           options={options}
+          tenantInfo={tenantInfo}
+          onRef={(ref)=>this.formRef=ref}
           onClose={this.onClose}
           onChange={this.onChange}
-          tenantInfo={tenantInfo}
+          addTenantInfo={this.addTenantInfo}
+          editTenantInfo={this.editTenantInfo}
         >
 
         </AddOrEditTenant>
